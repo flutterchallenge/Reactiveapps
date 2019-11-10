@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapp/bloc/config_bloc.dart';
+import 'package:flutterapp/item_list.dart';
 
 import 'bloc/bloc_provider.dart';
 import 'model/config.dart';
@@ -21,6 +22,7 @@ class ConfigFetch extends StatelessWidget {
             primarySwatch: Colors.red,
           ),
           home: SplashScreen(),
+          debugShowCheckedModeBanner: false,
         ),
       ),
     );
@@ -42,7 +44,15 @@ class _SplashScreenState extends State<SplashScreen> {
             if(snapshot.data == null) {
               return Container( child: Center( child : CircularProgressIndicator()),);
             } else {
-              return Container( child: Center( child : Text(snapshot.data.appName)),);
+              return Center(
+                child: Column(children: [
+                   Text(snapshot.data.appName),
+                  SizedBox(height: 8.0),
+                  RaisedButton(child: Text("ScoppedModel"), onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Items()));
+                  },)
+                ]),
+              );
             }
           },
 
