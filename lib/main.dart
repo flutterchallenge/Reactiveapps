@@ -1,31 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutterapp/bloc/config_bloc.dart';
+import 'package:flutterapp/bloc/forex_bloc.dart';
+import 'package:flutterapp/bloc_example.dart';
 import 'package:flutterapp/item_list.dart';
-
-import 'bloc/bloc_provider.dart';
-import 'model/config.dart';
 
 void main() => runApp(ConfigFetch());
 
 class ConfigFetch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final configBloc = ConfigBloc();
-    configBloc.getConfig();
-    return BlocProvider<ConfigBloc>(
-      bloc: ConfigBloc(),
-      child: BlocProvider<ConfigBloc>(
-        bloc: configBloc,
-        child: MaterialApp(
+    return MaterialApp(
           title: 'Flutter App',
           theme: ThemeData(
             primarySwatch: Colors.red,
           ),
           home: SplashScreen(),
-          debugShowCheckedModeBanner: false,
-        ),
-      ),
-    );
+          debugShowCheckedModeBanner: false,);
   }
 }
 class SplashScreen extends StatefulWidget {
@@ -38,24 +27,20 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(body: StreamBuilder<Config> (
-          stream: BlocProvider.of<ConfigBloc>(context).configStream,
-          builder: (context, snapshot) {
-            if(snapshot.data == null) {
-              return Container( child: Center( child : CircularProgressIndicator()),);
-            } else {
-              return Center(
-                child: Column(children: [
-                   Text(snapshot.data.appName),
-                  SizedBox(height: 8.0),
-                  RaisedButton(child: Text("ScoppedModel"), onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Items()));
-                  },)
-                ]),
-              );
-            }
-          },
-
+      return Scaffold(
+        appBar: AppBar(title: Text("Reactive app"), centerTitle: true,),
+          body: Center(
+        child: Column(
+          children: <Widget>[
+            RaisedButton( child: Text("Scopped Model (counter)"), onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => Items()));
+            },),
+            SizedBox(height: 8.0,),
+            RaisedButton( child: Text("Bloc pattern (currency converter)"), onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForexPage()));
+            },)
+          ],
+        ),
       ));
   }
 }
